@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}我的歷史紀錄 — 玄機閣{% endblock %}
+{% block meta_description %}查看您過去所有的算命與抽籤紀錄，回顧命運的軌跡。{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="text-center mb-5">
+    <p class="ornament mb-2">✦ ✦ ✦</p>
+    <h1 class="section-title mb-2" id="history-page-title">我的占卜紀錄</h1>
+    <p style="color:var(--clr-muted);">回顧過去的命運指引，對照生活中的變化</p>
+  </div>
+
+  {% if records %}
+    <div class="row g-3">
+      {% for record in records %}
+      <div class="col-12 col-md-6">
+        <a href="{{ url_for('divination.result', record_id=record.id) }}"
+           class="text-decoration-none" id="history-record-{{ record.id }}">
+          <div class="mystic-card p-4 d-flex align-items-start gap-3">
+            <div style="font-size:2.2rem;flex-shrink:0;">
+              {% if record.type == '塔羅' %}🃏{% else %}🎋{% endif %}
+            </div>
+            <div class="flex-grow-1 overflow-hidden">
+              <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
+                <span class="badge" style="background:rgba(139,92,246,0.2);color:var(--clr-purple-lt);font-size:0.75rem;border-radius:12px;padding:0.25rem 0.7rem;">
+                  {{ record.type }}
+                </span>
+                <small style="color:var(--clr-muted);font-size:0.78rem;">{{ record.created_at[:10] }}</small>
+              </div>
+              <p class="mb-1 fw-semibold" style="color:var(--clr-gold-lt);font-size:0.95rem;
+                white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                {{ record.result_title }}
+              </p>
+              <p class="mb-0" style="color:var(--clr-muted);font-size:0.82rem;
+                white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                {{ record.result_content[:50] }}…
+              </p>
+            </div>
+            <i class="bi bi-chevron-right" style="color:var(--clr-border);flex-shrink:0;margin-top:4px;"></i>
+          </div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- 計數 -->
+    <p class="text-center mt-4" style="color:var(--clr-muted);font-size:0.85rem;" id="history-count">
+      共 {{ records|length }} 筆紀錄
+    </p>
+
+  {% else %}
+    <!-- 無記錄 -->
+    <div class="text-center py-5" id="history-empty">
+      <p style="font-size:3rem;opacity:0.4;">🔮</p>
+      <p style="color:var(--clr-muted);">您尚未有任何占卜紀錄</p>
+      <a href="{{ url_for('divination.index') }}" class="btn btn-gold mt-2" id="history-empty-btn">
+        <i class="bi bi-stars me-2"></i>立即開始占卜
+      </a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}登入 — 玄機閣{% endblock %}
+{% block meta_description %}登入玄機閣，查看您的算命紀錄與個人化指引。{% endblock %}
+
+{% block content %}
+<div class="container py-5" style="max-width:440px;">
+  <div class="text-center mb-4">
+    <p class="ornament mb-2">✦ ✦ ✦</p>
+    <h1 class="section-title mb-1" style="font-size:2rem;" id="login-page-title">登入帳號</h1>
+    <p style="color:var(--clr-muted);font-size:0.9rem;">開啟您的命運之門</p>
+  </div>
+
+  <div class="mystic-card p-4 p-md-5">
+    <form action="{{ url_for('auth.login') }}" method="POST" id="login-form">
+      <div class="mb-4">
+        <label for="username" class="form-label"><i class="bi bi-person-circle me-1"></i>帳號名稱</label>
+        <input type="text" class="form-control" id="username" name="username"
+               placeholder="請輸入您的帳號" required autocomplete="username" />
+      </div>
+      <div class="mb-4">
+        <label for="password" class="form-label"><i class="bi bi-lock me-1"></i>密碼</label>
+        <input type="password" class="form-control" id="password" name="password"
+               placeholder="請輸入您的密碼" required autocomplete="current-password" />
+      </div>
+      <div class="d-grid mt-2">
+        <button type="submit" class="btn btn-gold py-2" id="login-submit-btn">
+          <i class="bi bi-box-arrow-in-right me-2"></i>登入
+        </button>
+      </div>
+    </form>
+
+    <hr style="border-color:var(--clr-border);margin:1.5rem 0;">
+    <p class="text-center mb-0" style="color:var(--clr-muted);font-size:0.9rem;">
+      還沒有帳號？
+      <a href="{{ url_for('auth.register') }}" style="color:var(--clr-purple-lt);" id="goto-register-link">免費加入玄機閣</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

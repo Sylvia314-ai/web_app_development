@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}玄機閣 — 線上算命系統{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}玄機閣提供線上抽籤、塔羅占卜等功能，讓您隨時隨地獲得心靈指引。{% endblock %}" />
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;600;700&family=Ma+Shan+Zheng&display=swap" rel="stylesheet" />
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <style>
+    :root {
+      --clr-bg:        #0d0a1a;
+      --clr-surface:   #16112e;
+      --clr-card:      #1e1740;
+      --clr-border:    rgba(180,140,255,0.2);
+      --clr-gold:      #c9a227;
+      --clr-gold-lt:   #f0d080;
+      --clr-purple:    #8b5cf6;
+      --clr-purple-lt: #c4b5fd;
+      --clr-text:      #e8e0f8;
+      --clr-muted:     #9b8ec4;
+      --font-body:     'Noto Serif TC', serif;
+      --font-title:    'Ma Shan Zheng', cursive;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      background-color: var(--clr-bg);
+      color: var(--clr-text);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-image:
+        radial-gradient(ellipse 80% 60% at 50% -20%, rgba(139,92,246,0.15) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 80% 100%, rgba(201,162,39,0.08) 0%, transparent 60%);
+    }
+
+    /* ── Navbar ── */
+    .navbar {
+      background: rgba(22,17,46,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--clr-border);
+      padding: 0.75rem 0;
+    }
+    .navbar-brand {
+      font-family: var(--font-title);
+      font-size: 1.8rem;
+      color: var(--clr-gold) !important;
+      letter-spacing: 0.08em;
+      text-shadow: 0 0 16px rgba(201,162,39,0.5);
+    }
+    .navbar-brand .brand-sub {
+      font-size: 0.6rem;
+      color: var(--clr-purple-lt);
+      display: block;
+      letter-spacing: 0.15em;
+      font-family: var(--font-body);
+      margin-top: -4px;
+    }
+    .nav-link {
+      color: var(--clr-purple-lt) !important;
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+      padding: 0.4rem 0.9rem !important;
+      border-radius: 6px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .nav-link:hover, .nav-link.active {
+      color: var(--clr-gold-lt) !important;
+      background: rgba(201,162,39,0.1);
+    }
+    .nav-btn-login {
+      border: 1px solid var(--clr-purple);
+      padding: 0.35rem 1rem !important;
+      border-radius: 20px;
+    }
+    .nav-btn-login:hover {
+      background: var(--clr-purple) !important;
+      color: #fff !important;
+      border-color: transparent;
+    }
+
+    /* ── Flash Messages ── */
+    .flash-container { margin-top: 0.5rem; }
+    .flash-container .alert {
+      border-radius: 10px;
+      font-size: 0.9rem;
+      border: 1px solid var(--clr-border);
+      background: rgba(30,23,64,0.9);
+    }
+    .alert-success { border-left: 4px solid #4ade80; color: #86efac; }
+    .alert-danger  { border-left: 4px solid #f87171; color: #fca5a5; }
+    .alert-warning { border-left: 4px solid #facc15; color: #fde68a; }
+    .alert-info    { border-left: 4px solid var(--clr-purple-lt); color: var(--clr-purple-lt); }
+
+    /* ── Main Content ── */
+    main { flex: 1; }
+
+    /* ── Cards ── */
+    .mystic-card {
+      background: var(--clr-card);
+      border: 1px solid var(--clr-border);
+      border-radius: 16px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05);
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+    .mystic-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 56px rgba(139,92,246,0.2), inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+
+    /* ── Buttons ── */
+    .btn-mystic {
+      background: linear-gradient(135deg, #7c3aed, #4f46e5);
+      color: #fff;
+      border: none;
+      border-radius: 25px;
+      padding: 0.55rem 1.8rem;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      letter-spacing: 0.06em;
+      box-shadow: 0 4px 20px rgba(124,58,237,0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-mystic:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(124,58,237,0.6);
+      color: #fff;
+    }
+    .btn-gold {
+      background: linear-gradient(135deg, #b7861f, #c9a227, #e8c84a);
+      color: #1a1400;
+      border: none;
+      border-radius: 25px;
+      padding: 0.55rem 1.8rem;
+      font-weight: 700;
+      font-size: 0.95rem;
+      letter-spacing: 0.06em;
+      box-shadow: 0 4px 20px rgba(201,162,39,0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-gold:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(201,162,39,0.5);
+      color: #1a1400;
+    }
+    .btn-outline-mystic {
+      border: 1px solid var(--clr-purple);
+      color: var(--clr-purple-lt);
+      border-radius: 25px;
+      padding: 0.5rem 1.6rem;
+      background: transparent;
+      transition: all 0.2s;
+    }
+    .btn-outline-mystic:hover {
+      background: var(--clr-purple);
+      color: #fff;
+    }
+
+    /* ── Forms ── */
+    .form-control, .form-select {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--clr-border);
+      color: var(--clr-text);
+      border-radius: 10px;
+    }
+    .form-control:focus, .form-select:focus {
+      background: rgba(255,255,255,0.08);
+      border-color: var(--clr-purple);
+      color: var(--clr-text);
+      box-shadow: 0 0 0 3px rgba(139,92,246,0.2);
+    }
+    .form-control::placeholder { color: var(--clr-muted); }
+    .form-label { color: var(--clr-muted); font-size: 0.88rem; letter-spacing: 0.08em; }
+
+    /* ── Dividers / Decorations ── */
+    .section-title {
+      font-family: var(--font-title);
+      font-size: 1.8rem;
+      color: var(--clr-gold);
+      text-shadow: 0 0 24px rgba(201,162,39,0.4);
+      letter-spacing: 0.12em;
+    }
+    .ornament {
+      color: var(--clr-gold);
+      opacity: 0.5;
+      font-size: 0.9rem;
+      letter-spacing: 0.5em;
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: rgba(13,10,26,0.95);
+      border-top: 1px solid var(--clr-border);
+      color: var(--clr-muted);
+      font-size: 0.82rem;
+      padding: 1.5rem 0;
+      text-align: center;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── Stars animation ── */
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 0.8; }
+    }
+    .star {
+      position: fixed;
+      border-radius: 50%;
+      background: #fff;
+      animation: twinkle var(--dur, 3s) ease-in-out infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+  </style>
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="{{ url_for('main.index') }}">
+        ☽ 玄機閣
+        <span class="brand-sub">ONLINE FORTUNE TELLING</span>
+      </a>
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" style="color:var(--clr-purple-lt)">
+        <i class="bi bi-list fs-4"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto align-items-center gap-1">
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('main.index') }}"><i class="bi bi-house-door me-1"></i>首頁</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('divination.index') }}"><i class="bi bi-stars me-1"></i>占卜抽籤</a></li>
+          {% if session.get('user_id') %}
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('divination.history') }}"><i class="bi bi-clock-history me-1"></i>歷史紀錄</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('donation.donate') }}"><i class="bi bi-heart me-1"></i>添香油錢</a></li>
+            <li class="nav-item ms-1">
+              <a class="nav-link nav-btn-login" href="{{ url_for('auth.logout') }}">
+                <i class="bi bi-box-arrow-right me-1"></i>登出 ({{ session.get('username') }})
+              </a>
+            </li>
+          {% else %}
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('donation.donate') }}"><i class="bi bi-heart me-1"></i>添香油錢</a></li>
+            <li class="nav-item ms-1"><a class="nav-link nav-btn-login" href="{{ url_for('auth.login') }}"><i class="bi bi-person me-1"></i>登入</a></li>
+            <li class="nav-item"><a class="nav-link nav-btn-login" href="{{ url_for('auth.register') }}"><i class="bi bi-person-plus me-1"></i>免費註冊</a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Flash Messages -->
+  <div class="container flash-container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show mt-3" role="alert" id="flash-{{ loop.index }}">
+            {{ message }}
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  </div>
+
+  <!-- Main -->
+  <main class="py-4">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p class="mb-1 ornament">✦ ✦ ✦</p>
+    <p class="mb-0">© 2025 玄機閣 · 線上算命系統 · 僅供娛樂參考，請理性看待</p>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // 產生星星背景
+    for (let i = 0; i < 40; i++) {
+      const s = document.createElement('div');
+      s.classList.add('star');
+      const size = Math.random() * 2 + 1;
+      s.style.cssText = `
+        width:${size}px;height:${size}px;
+        top:${Math.random()*100}vh;left:${Math.random()*100}vw;
+        --dur:${2 + Math.random()*4}s;
+        animation-delay:${Math.random()*4}s;
+      `;
+      document.body.appendChild(s);
+    }
+  </script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

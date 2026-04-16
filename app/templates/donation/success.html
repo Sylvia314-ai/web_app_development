@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}感謝您的心香 — 玄機閣{% endblock %}
+
+{% block extra_css %}
+<style>
+  @keyframes floatUp {
+    0%   { opacity:0; transform:translateY(20px) scale(0.95); }
+    100% { opacity:1; transform:translateY(0) scale(1); }
+  }
+  .success-card { animation: floatUp 0.8s ease forwards; }
+  @keyframes flicker {
+    0%,100% { text-shadow: 0 0 12px rgba(255,200,60,0.8), 0 0 30px rgba(255,140,0,0.6); }
+    50%      { text-shadow: 0 0 20px rgba(255,220,80,1),   0 0 50px rgba(255,160,0,0.8); }
+  }
+  .candle-icon { animation: flicker 1.6s ease-in-out infinite; display:inline-block; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5" style="max-width:540px;">
+  <div class="mystic-card p-5 text-center success-card">
+    <div class="candle-icon mb-3" style="font-size:4rem;">🕯️</div>
+    <p class="ornament mb-2">✦ 心香已燃 ✦</p>
+    <h1 class="section-title mb-3" style="font-size:1.8rem;" id="success-page-title">功德圓滿，感謝您的心意</h1>
+
+    {% if amount %}
+    <p style="color:var(--clr-muted);font-size:0.95rem;">
+      您此次捐獻金額為
+      <span style="color:var(--clr-gold);font-weight:700;font-size:1.2rem;">NT$ {{ amount }}</span>
+    </p>
+    {% endif %}
+
+    <div class="p-4 mb-4 mt-3" style="background:rgba(201,162,39,0.06);border:1px solid rgba(201,162,39,0.2);border-radius:12px;" id="success-blessing-box">
+      <p class="mb-0" style="line-height:2;font-size:0.95rem;color:var(--clr-text);">
+        您的心誠意達，一縷心香，已化為祝福飄向四方。<br>
+        願神明庇佑，您所祈願之事皆能如願，<br>
+        平安健康，諸事順遂。
+      </p>
+    </div>
+
+    <div class="d-flex justify-content-center gap-3 flex-wrap">
+      <a href="{{ url_for('main.index') }}" class="btn btn-gold px-4" id="success-home-btn">
+        <i class="bi bi-house-door me-2"></i>返回首頁
+      </a>
+      <a href="{{ url_for('divination.index') }}" class="btn btn-outline-mystic px-4" id="success-divine-btn">
+        <i class="bi bi-stars me-2"></i>繼續占卜
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

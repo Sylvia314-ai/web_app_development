@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}選擇占卜 — 玄機閣{% endblock %}
+{% block meta_description %}選擇您想要的占卜方式，廟宇抽籤或塔羅牌，立即獲得心靈指引。{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="text-center mb-5">
+    <p class="ornament mb-2">✦ ✦ ✦</p>
+    <h1 class="section-title mb-2" id="divination-index-title">選擇您的占卜方式</h1>
+    <p style="color:var(--clr-muted);">靜下心來，專注於您的問題，再選擇占卜方式</p>
+    {% if not session.get('user_id') %}
+    <div class="d-inline-block mt-2 px-4 py-2" style="background:rgba(201,162,39,0.1);border:1px solid rgba(201,162,39,0.3);border-radius:10px;">
+      <small style="color:var(--clr-gold-lt);">
+        <i class="bi bi-info-circle me-1"></i>
+        <a href="{{ url_for('auth.login') }}" style="color:var(--clr-gold-lt);">登入</a>後可永久保存您的占卜紀錄
+      </small>
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="row g-4 justify-content-center">
+    {% for dtype in divination_types %}
+    <div class="col-md-5">
+      <div class="mystic-card p-5 text-center h-100 d-flex flex-direction-column align-items-center" id="card-{{ dtype }}">
+        <div class="mb-4">
+          {% if dtype == '抽籤' %}
+            <span style="font-size:4rem;">🎋</span>
+          {% elif dtype == '塔羅' %}
+            <span style="font-size:4rem;">🃏</span>
+          {% else %}
+            <span style="font-size:4rem;">🔮</span>
+          {% endif %}
+        </div>
+        <h2 style="color:var(--clr-gold);font-family:var(--font-title);font-size:1.8rem;">{{ dtype }}</h2>
+        <p style="color:var(--clr-muted);font-size:0.92rem;line-height:1.9;margin:1rem 0;">
+          {% if dtype == '抽籤' %}
+            效法傳統廟宇求籤，從籤詩中獲得神明的指示與祝福，六十甲子籤詩，各有玄機。
+          {% elif dtype == '塔羅' %}
+            西方神秘學的智慧，每張牌蘊含宇宙能量，讓塔羅牌為您揭示當下的方向。
+          {% else %}
+            透過古老的占問方式，尋求對當下困惑的解答與啟示。
+          {% endif %}
+        </p>
+        <form action="{{ url_for('divination.draw') }}" method="POST" class="mt-auto w-100" id="form-draw-{{ dtype }}">
+          <input type="hidden" name="divination_type" value="{{ dtype }}" />
+          <button type="submit" class="btn btn-gold w-100 py-2" id="btn-draw-{{ dtype }}">
+            <i class="bi bi-stars me-2"></i>開始{{ dtype }}
+          </button>
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

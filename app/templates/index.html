@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}玄機閣 — 心靈指引，線上算命{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="text-center py-5 position-relative overflow-hidden">
+  <div class="container" style="position:relative;z-index:1;">
+    <p class="ornament mb-3">✦ ✦ ✦</p>
+    <h1 class="section-title mb-3" style="font-size:3rem;">玄機閣</h1>
+    <p style="color:var(--clr-purple-lt);font-size:1.1rem;letter-spacing:0.1em;">命運的密碼，就在此刻揭曉</p>
+    <p class="mx-auto mt-3" style="max-width:520px;color:var(--clr-muted);line-height:1.9;">
+      在快節奏的生活中，您是否曾對未來感到迷惘？玄機閣集抽籤、塔羅占卜於一體，
+      讓您隨時隨地尋求心靈的指引與平靜。
+    </p>
+    <div class="d-flex justify-content-center gap-3 mt-4 flex-wrap">
+      <a href="{{ url_for('divination.index') }}" class="btn btn-gold px-4 py-2" id="hero-divine-btn">
+        <i class="bi bi-stars me-2"></i>立即占卜
+      </a>
+      {% if not session.get('user_id') %}
+        <a href="{{ url_for('auth.register') }}" class="btn btn-outline-mystic px-4 py-2" id="hero-register-btn">
+          <i class="bi bi-person-plus me-2"></i>免費加入會員
+        </a>
+      {% else %}
+        <a href="{{ url_for('divination.history') }}" class="btn btn-outline-mystic px-4 py-2" id="hero-history-btn">
+          <i class="bi bi-clock-history me-2"></i>查看歷史紀錄
+        </a>
+      {% endif %}
+    </div>
+  </div>
+  <!-- Glow -->
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:300px;
+    background:radial-gradient(ellipse,rgba(139,92,246,0.12) 0%,transparent 70%);pointer-events:none;"></div>
+</section>
+
+<!-- Divider -->
+<div class="container"><hr style="border-color:var(--clr-border);"></div>
+
+<!-- Feature Cards -->
+<section class="container py-5">
+  <p class="text-center ornament mb-2">— 我們的服務 —</p>
+  <h2 class="text-center section-title mb-5" style="font-size:1.9rem;" id="services-section">命運指引服務</h2>
+  <div class="row g-4 justify-content-center">
+
+    <div class="col-md-4">
+      <div class="mystic-card p-4 h-100 text-center" id="feature-fortune-stick">
+        <div class="mb-3" style="font-size:2.5rem;">🎋</div>
+        <h3 style="color:var(--clr-gold);font-family:var(--font-title);font-size:1.4rem;">廟宇抽籤</h3>
+        <p style="color:var(--clr-muted);font-size:0.9rem;line-height:1.8;margin-top:0.8rem;">
+          效法傳統廟宇求籤文化，從六十甲子籤詩中隨機抽取一支，獲得來自神明的指引與啟示。
+        </p>
+        <a href="{{ url_for('divination.index') }}" class="btn btn-mystic btn-sm mt-auto" id="feature-stick-btn">開始抽籤</a>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="mystic-card p-4 h-100 text-center" id="feature-tarot">
+        <div class="mb-3" style="font-size:2.5rem;">🃏</div>
+        <h3 style="color:var(--clr-gold);font-family:var(--font-title);font-size:1.4rem;">塔羅占卜</h3>
+        <p style="color:var(--clr-muted);font-size:0.9rem;line-height:1.8;margin-top:0.8rem;">
+          透過神秘的塔羅牌解讀您當下的能量與方向，每一張牌背後都藏有宇宙給您的深刻訊息。
+        </p>
+        <a href="{{ url_for('divination.index') }}" class="btn btn-mystic btn-sm mt-auto" id="feature-tarot-btn">抽取塔羅牌</a>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="mystic-card p-4 h-100 text-center" id="feature-donation">
+        <div class="mb-3" style="font-size:2.5rem;">🕯️</div>
+        <h3 style="color:var(--clr-gold);font-family:var(--font-title);font-size:1.4rem;">添香油錢</h3>
+        <p style="color:var(--clr-muted);font-size:0.9rem;line-height:1.8;margin-top:0.8rem;">
+          以誠心祈福供奉，在線上為您最在意的人祈求平安健康，一份心意，傳達無限祝福。
+        </p>
+        <a href="{{ url_for('donation.donate') }}" class="btn btn-mystic btn-sm mt-auto" id="feature-donation-btn">立即添香</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA Banner -->
+{% if not session.get('user_id') %}
+<section class="py-5" style="background:linear-gradient(135deg,rgba(30,23,64,0.8),rgba(22,17,46,0.8));border-top:1px solid var(--clr-border);border-bottom:1px solid var(--clr-border);">
+  <div class="container text-center">
+    <h2 class="section-title mb-3" style="font-size:1.7rem;" id="cta-section">加入會員，保存您的命運軌跡</h2>
+    <p style="color:var(--clr-muted);max-width:460px;margin:0 auto 1.5rem;line-height:1.8;">
+      免費註冊後，每次算命的結果皆可永久保存，隨時回顧與對照，見證命運的流轉。
+    </p>
+    <a href="{{ url_for('auth.register') }}" class="btn btn-gold px-5 py-2" id="cta-register-btn">
+      <i class="bi bi-person-plus me-2"></i>立即免費加入
+    </a>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

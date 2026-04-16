@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}添香油錢 — 玄機閣{% endblock %}
+{% block meta_description %}線上添香油錢，誠心祈福，為自己與親友祈求平安健康。{% endblock %}
+
+{% block content %}
+<div class="container py-5" style="max-width:560px;">
+  <div class="text-center mb-5">
+    <p class="ornament mb-2">✦ ✦ ✦</p>
+    <h1 class="section-title mb-2" id="donate-page-title">線上添香油錢</h1>
+    <p style="color:var(--clr-muted);">一份誠心，傳遞無限祝福與平安</p>
+  </div>
+
+  <div class="mystic-card p-4 p-md-5">
+    <div class="text-center mb-4">
+      <span style="font-size:3.5rem;">🕯️</span>
+    </div>
+
+    {% if not session.get('user_id') %}
+    <div class="alert alert-warning mb-4" style="background:rgba(250,204,21,0.08);border-color:rgba(250,204,21,0.3);">
+      <i class="bi bi-info-circle me-2"></i>
+      <a href="{{ url_for('auth.login') }}" style="color:var(--clr-gold-lt);">登入</a>後才能完成捐獻，紀錄也將一併保存。
+    </div>
+    {% endif %}
+
+    <form action="{{ url_for('donation.process_donate') }}" method="POST" id="donate-form">
+      <p class="form-label mb-3">請選擇香油金額</p>
+
+      <div class="row g-2 mb-4" id="donation-amount-group">
+        {% for opt in donation_options %}
+        <div class="col-4">
+          <input type="radio" class="btn-check" name="amount" id="amount-{{ opt }}"
+                 value="{{ opt }}" {% if loop.first %}checked{% endif %} autocomplete="off" required />
+          <label class="btn w-100 py-2" for="amount-{{ opt }}" id="label-amount-{{ opt }}"
+                 style="border:1px solid var(--clr-border);color:var(--clr-text);background:rgba(255,255,255,0.03);border-radius:10px;transition:all 0.2s;">
+            NT$ {{ opt }}
+          </label>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="d-grid">
+        <button type="submit" class="btn btn-gold py-2" id="donate-submit-btn">
+          <i class="bi bi-fire me-2"></i>點燃心香，完成添獻
+        </button>
+      </div>
+    </form>
+
+    <p class="text-center mt-4 mb-0" style="color:var(--clr-muted);font-size:0.82rem;" id="donate-note">
+      ※ 本功能目前為模擬捐獻，不會進行實際金融交易
+    </p>
+  </div>
+</div>
+
+{% block extra_js %}
+<script>
+  // 選中時高亮金額按鈕
+  document.querySelectorAll('input[name="amount"]').forEach(radio => {
+    radio.addEventListener('change', function () {
+      document.querySelectorAll('label[for^="amount-"]').forEach(l => {
+        l.style.borderColor = 'var(--clr-border)';
+        l.style.color = 'var(--clr-text)';
+        l.style.background = 'rgba(255,255,255,0.03)';
+      });
+      const lbl = document.querySelector(`label[for="${this.id}"]`);
+      lbl.style.borderColor = 'var(--clr-gold)';
+      lbl.style.color = 'var(--clr-gold)';
+      lbl.style.background = 'rgba(201,162,39,0.1)';
+    });
+    // Init first
+    if (radio.checked) radio.dispatchEvent(new Event('change'));
+  });
+</script>
+{% endblock %}
+{% endblock %}
